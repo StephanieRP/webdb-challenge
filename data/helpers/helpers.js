@@ -30,20 +30,21 @@ function getActions() {
     .join("project", "project.id", "action.project_id");
 }
 
-const getProject = async (id, res) => {
-  try {
-    const project = await getProjects()
-      .where({ id })
-      .first();
-    const actions = await getActions().where({ project_id: id });
-    return {
-      ...project,
-      actions
-    };
-  } catch (error) {
-    console.log(error);
-  }
-};
+function getProject(id) {
+  const project = db("project")
+    .where({ id })
+    .first();
+
+  const action = db("action")
+    .join("project", "action.project_id", "project.id")
+    .select("action.*")
+    .where("project.id", "=", id);
+
+  return Promise.all([project, action]).then(newProject => {
+    const [project, action] = newProject;
+    return { ...project, action };
+  });
+}
 
 function getActions(action) {
   return db("action");
