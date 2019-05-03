@@ -49,7 +49,7 @@ router.get("/:id", async (req, res) => {
 // Delete request to delete actions --> /:id
 router.delete("/:id", async (req, res) => {
   try {
-    const action = await actionsDB.removeAction(req.params.id);
+    const action = await db.removeAction(req.params.id);
     action > 0
       ? res.status(204).end()
       : res.status(404).json({
@@ -69,14 +69,12 @@ router.put("/:id", async (req, res) => {
   const newAction = req.body;
   try {
     const { id } = req.params;
-    const action = await actionsDB.updateAction(id, newAction);
+    const action = await db.updateAction(id, newAction);
     action
       ? res.status(200).json(newAction)
-      : res
-          .status(404)
-          .json({
-            message: "The action with the specified ID does not exist."
-          });
+      : res.status(404).json({
+          message: "The action with the specified ID does not exist."
+        });
   } catch (error) {
     // log error to database
     console.log(error);

@@ -52,7 +52,7 @@ router.get("/:id-action", async (req, res) => {
 // Remove request to delete project --> /:id
 router.delete("/:id", async (req, res) => {
   try {
-    const project = await actionsDB.removeProject(req.params.id);
+    const project = await db.removeProject(req.params.id);
     project > 0
       ? res.status(204).end()
       : res.status(404).json({
@@ -72,7 +72,7 @@ router.put("/:id", async (req, res) => {
   const newProject = req.body;
   try {
     const { id } = req.params;
-    const project = await actionsDB.updateProject(id, newProject);
+    const project = await db.updateProject(id, newProject);
     project
       ? res.status(200).json(newProject)
       : res.status(404).json({
