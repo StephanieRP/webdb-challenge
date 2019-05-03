@@ -37,7 +37,10 @@ router.get("/:id-action", async (req, res) => {
   const { id } = req.params;
   try {
     const project = await db.getProject(id);
-    res.status(200).json(project);
+    project.id
+      ? res.status(200).json(project)
+      : res.status(404).json({ message: "Could not find project by that ID" });
+    console.log(project.id);
   } catch (error) {
     res
       .status(500)
